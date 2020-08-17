@@ -28,40 +28,70 @@ db.on('error', () => console.log('Database error'))
 var router = express.Router();
 
 router.get('/testing', (req, res) => {
-  res.send('<h1>Testing is working</h1>')
+	res.send('<h1>Testing is working</h1>')
 })
 
+//CRUD projects
 router.get('/projects', (req, res) => {
-  Project.find()
+  	Project.find()
 	.then((projects) => {
 	    res.json(projects);
-  })
+  	})
 })
 
 router.get('/projects/:id', (req, res) => {
-  Project.findOne({id:req.params.id})
+  	Project.findOne({id:req.params.id})
 	.then((project) => {
 	    res.json(project)
-  })
+ 	})
 })
 
 router.post('/projects', (req, res) => {
 
-  var project = new Project()
+  	var project = new Project()
 	project.id = Date.now()
 	
 	var data = req.body
-  console.log(data)
+	// console.log(data)
 	Object.assign(project,data)
 	project.save()
 	.then((project) => {
 	  	res.json(project)
-  })
+  	})
   
 })
 
+router.put('/projects/:id', (req, res) => {
+
+	Project.findOne({id:req.params.id})
+	.then((project) => {
+		var data = req.body
+		Object.assign(project,data)
+		return project.save()	
+	})
+	.then((project) => {
+		 res.json(project)
+	})
+
+})
+
+router.delete('/projects/:id', (req, res) => {
+
+	Project.deleteOne({ id: req.params.id })
+	.then(() => {
+		res.json('deleted')
+	})
+	
+})
+
+//CRUD types
+
+
+//CRUD users - optional
+
+
 //use server to serve up routes
-app.use('/api', router);
+app.use('/api', router)
 
 // launch our backend into a port
 const apiPort = 3001;
