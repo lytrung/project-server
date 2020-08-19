@@ -94,5 +94,5 @@ router.delete('/projects/:id', (req, res) => {
 app.use('/api', router)
 
 // launch our backend into a port
-const apiPort = 3001;
+const apiPort = 4000;
 app.listen(apiPort, () => console.log('Listening on port '+apiPort));
