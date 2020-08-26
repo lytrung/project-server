@@ -7,6 +7,9 @@ var mongoose = require('mongoose')
 
 //the model
 var Project = require('./project-model')
+var Type = require('./type-model')
+var User = require('./user-model')
+
 
 //setup express server
 var app = express()
@@ -85,9 +88,57 @@ router.delete('/projects/:id', (req, res) => {
 })
 
 //CRUD types
+router.get('/types', (req, res) => {
+
+	Type.find()
+	.then((types) => {
+	    return res.json(types)
+	})
+
+})
+
+router.get('/types/:id', (req, res) => {
+	Type.findOne({id:req.params.id})
+	.then((type) => {
+	    return res.json(type)
+	})
+})
+
+//CRUD users
+router.get('/users/:id', (req, res) => {
 
 
-//CRUD users - optional
+	User.findOne({id:req.params.id})
+	.then((user) => {
+	    return res.json(user);
+	});
+})
+
+router.post('/users', (req, res) => {
+
+	var user = new User()
+	user.id = Date.now()
+	
+	var data = req.body
+	Object.assign(user,data)
+	
+	user.save()
+	.then((user) => {
+	  	return res.json(user)
+	})
+})
+
+router.put('/users/:id', (req, res) => {
+	User.findOne({id:req.params.id})
+	.then((user) => {
+		var data = req.body
+		Object.assign(user,data)
+		return user.save()	
+	})
+	.then((user) => {
+		return res.json(user)
+	})
+})
 
 
 //use server to serve up routes
