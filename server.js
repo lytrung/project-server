@@ -37,6 +37,7 @@ router.get('/testing', (req, res) => {
 //CRUD projects
 router.get('/projects', (req, res) => {
   	Project.find()
+  	.populate('type')
 	.then((projects) => {
 	    res.json(projects);
   	})
@@ -44,6 +45,7 @@ router.get('/projects', (req, res) => {
 
 router.get('/projects/:id', (req, res) => {
   	Project.findOne({id:req.params.id})
+  	.populate('type')
 	.then((project) => {
 	    res.json(project)
  	})
@@ -99,6 +101,11 @@ router.get('/types', (req, res) => {
 
 router.get('/types/:id', (req, res) => {
 	Type.findOne({id:req.params.id})
+	.populate('projects')
+	// .populate({ 		
+	// 	path:'projects',	//deep population
+	// 	populate:'type'
+	// })
 	.then((type) => {
 	    return res.json(type)
 	})

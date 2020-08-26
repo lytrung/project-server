@@ -11,7 +11,7 @@ var UserSchema = new Schema(
     email: String,
   },
   { timestamps: true }
-);
+)
 
 // export the new Schema so we could modify it using Node.js
 module.exports = mongoose.model('User', UserSchema);
