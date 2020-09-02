@@ -39,7 +39,7 @@ router.get('/projects', (req, res) => {
   	Project.find()
   	.populate('type')
 	.then((projects) => {
-	    res.json(projects);
+	    res.json(projects)
   	})
 })
 
@@ -112,6 +112,14 @@ router.get('/types/:id', (req, res) => {
 })
 
 //CRUD users
+
+router.get('/users', (req, res) => {
+  	User.find()
+	.then((users) => {
+	    res.json(users)
+  	})
+})
+
 router.get('/users/:id', (req, res) => {
 
 
@@ -144,6 +152,16 @@ router.put('/users/:id', (req, res) => {
 	})
 	.then((user) => {
 		return res.json(user)
+	})
+})
+
+router.post('/users/authenticate', (req, res) => {
+
+	var {username,password} = req.body;
+	var credential = {username,password}
+	User.findOne(credential)
+	.then((user) => {
+	    return res.json(user)
 	})
 })
 
