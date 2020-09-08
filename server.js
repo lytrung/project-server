@@ -4,6 +4,7 @@ var bodyParser = require('body-parser')
 var logger = require('morgan')
 var cors = require('cors')
 var mongoose = require('mongoose')
+var fileUpload = require('express-fileupload')
 
 //the model
 var Project = require('./project-model')
@@ -16,6 +17,9 @@ var app = express()
 app.use(cors())
 app.use(bodyParser.json()) // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })) // for parsing application/x-www-form-urlencoded
+
+app.use(fileUpload())
+
 app.use(logger('dev'))
 
 //setup database connection
@@ -26,6 +30,7 @@ db.once('open', () => console.log('Database connected'))
 db.on('error', () => console.log('Database error'))
 
 
+app.use(express.static('public'))
 
 //setup routes
 var router = express.Router();
@@ -163,6 +168,19 @@ router.post('/users/authenticate', (req, res) => {
 	.then((user) => {
 	    return res.json(user)
 	})
+})
+
+router.post('/upload', (req, res) => {
+
+	var files = Object.values(req.files)
+	var uploadedFile = files[0]
+
+	var newName = Date.now() + uploadedFile.name
+
+	uploadedFile.mv('public/'+ newName, function(){
+		res.send(newName)
+	})
+	
 })
 
 
